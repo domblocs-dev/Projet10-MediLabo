@@ -35,6 +35,9 @@ public class PatientsDbContext(DbContextOptions<PatientsDbContext> options) : Db
                   .IsFixedLength();
 
             entity.HasIndex(g => g.Code).IsUnique();
+            entity.HasData(
+                new Genre { Id = 1, Code = "F" },
+                new Genre { Id = 2, Code = "M" });
         });
     }
 
