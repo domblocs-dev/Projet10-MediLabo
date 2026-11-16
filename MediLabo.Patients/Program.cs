@@ -1,4 +1,5 @@
 using MediLabo.Patients.Data;
+using MediLabo.Patients.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<PatientsDbContext>(options =>
     options.UseSqlServer(connectionString)
         .UseSeeding(PatientsSeed.Seed)
         .UseAsyncSeeding(PatientsSeed.SeedAsync));
+
+builder.Services.AddScoped<PatientRepository>();
 
 var app = builder.Build();
 
