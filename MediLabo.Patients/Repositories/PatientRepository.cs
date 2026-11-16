@@ -21,6 +21,12 @@ public class PatientRepository(PatientsDbContext context)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    public async Task<Genre?> FindGenreByCodeAsync(string code)
+    {
+        return await context.Genres
+            .FirstOrDefaultAsync(g => g.Code == code);
+    }
+
     public async Task<Patient> AddAsync(Patient patient)
     {
         context.Patients.Add(patient);
