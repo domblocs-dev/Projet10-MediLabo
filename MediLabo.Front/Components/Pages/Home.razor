@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject PatientsClient Client
+
+<PageTitle>Patients</PageTitle>
+
+<h1>Patients</h1>
+
+<p>@patients.Count patients</p>
+
+@code {
+    private List<PatientDto> patients = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        patients = await Client.GetAllAsync();
+    }
+}

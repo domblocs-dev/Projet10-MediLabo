@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="MediLabo.Front/MediLabo.Front.csproj" Id="0b27ba35-a1c9-48d3-9a2d-c64109ec8986" />
   <Project Path="MediLabo.Gateway/MediLabo.Gateway.csproj" Id="29b33113-fd9f-4fcc-b538-8c3c1c3db881" />
   <Project Path="MediLabo.Patients/MediLabo.Patients.csproj" />
 </Solution>
