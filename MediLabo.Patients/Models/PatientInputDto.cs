@@ -13,6 +13,7 @@ public class PatientInputDto
     public string? Nom { get; set; }
 
     [Required]
+    [PasDansLeFutur(ErrorMessage = "La date de naissance ne peut pas être dans le futur.")]
     public DateOnly? DateNaissance { get; set; }
 
     [Required]
