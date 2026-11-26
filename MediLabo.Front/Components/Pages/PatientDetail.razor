@@ -1,0 +1,40 @@
+﻿@page "/patients/{id:int}"
+@inject PatientsClient Client
+
+<PageTitle>Patient</PageTitle>
+
+@if (patient is null)
+{
+    <h1>Patient introuvable</h1>
+    <p>Aucun patient ne porte le numéro @Id.</p>
+}
+else
+{
+    <h1>@patient.Prenom @patient.Nom</h1>
+    
+    <dl>
+        <dt>Date de naissance</dt>
+        <dd>@patient.DateNaissance.ToString("dd/MM/yyyy")</dd>
+
+        <dt>Genre</dt>
+        <dd>@patient.Genre</dd>
+
+        <dt>Adresse</dt>
+        <dd>@patient.Adresse</dd>
+
+        <dt>Téléphone</dt>
+        <dd>@patient.Telephone</dd>
+    </dl>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private PatientDto? patient;
+
+    protected override async Task OnInitializedAsync()
+    {
+        patient = await Client.GetByIdAsync(Id);
+    }
+}
