@@ -95,7 +95,11 @@ namespace MediLabo.Patients.Migrations
 
                     b.ToTable("Patients", t =>
                         {
+                            t.HasCheckConstraint("CK_Patients_Adresse", "[Adresse] IS NULL OR LEN([Adresse]) > 0");
+
                             t.HasCheckConstraint("CK_Patients_DateNaissance", "[DateNaissance] <= CAST(GETDATE() AS date)");
+
+                            t.HasCheckConstraint("CK_Patients_Telephone", "[Telephone] IS NULL OR LEN([Telephone]) > 0");
                         });
                 });
 

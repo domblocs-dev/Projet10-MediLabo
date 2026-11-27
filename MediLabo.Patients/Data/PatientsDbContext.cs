@@ -18,9 +18,19 @@ public class PatientsDbContext(DbContextOptions<PatientsDbContext> options) : Db
             entity.Property(p => p.Adresse).HasMaxLength(200);
             entity.Property(p => p.Telephone).HasMaxLength(20);
 
-            entity.ToTable(t => t.HasCheckConstraint(
-                "CK_Patients_DateNaissance",
-                "[DateNaissance] <= CAST(GETDATE() AS date)"));
+            entity.ToTable(t =>
+            {
+                t.HasCheckConstraint(
+                    "CK_Patients_DateNaissance",
+                    "[DateNaissance] <= CAST(GETDATE() AS date)");
+                t.HasCheckConstraint(
+                    "CK_Patients_Adresse",
+                    "[Adresse] IS NULL OR LEN([Adresse]) > 0");
+                t.HasCheckConstraint(
+                    "CK_Patients_Telephone",
+                    "[Telephone] IS NULL OR LEN([Telephone]) > 0");
+            });
+
             entity.HasOne(p => p.Genre)
                 .WithMany()
                 .HasForeignKey(p => p.GenreId)
