@@ -42,4 +42,19 @@ public class PatientsClient(HttpClient httpClient)
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<PatientDto>();
     }
+
+    // Modification faite (204) : true. Patient absent (404) ou données refusées (400) : false,
+    // et la page affichera un message. Les pannes (500, 502) restent des exceptions.
+    public async Task<bool> UpdateAsync(int id, PatientInputDto patient)
+    {
+        using HttpResponseMessage response = await httpClient.PutAsJsonAsync($"api/patients/{id}", patient);
+
+        if (response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.BadRequest)
+        {
+            return false;
+        }
+
+        response.EnsureSuccessStatusCode();
+        return true;
+    }
 }

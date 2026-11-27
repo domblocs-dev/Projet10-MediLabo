@@ -1,0 +1,73 @@
+﻿@page "/patients/{id:int}/modifier"
+@inject PatientsClient Client
+@inject NavigationManager Navigation
+
+<PageTitle>Modifier un patient</PageTitle>
+
+@if (Patient is null)
+{
+    <h1>Patient introuvable</h1>
+    <p>Aucun patient ne porte le numéro @Id.</p>
+}
+else
+{
+    <h1>Modifier le patient</h1>
+    @if (refuse)
+    {
+        <p>Le service Patients a refusé la modification. Vérifiez les informations saisies.</p>
+    }
+
+    <EditForm Model="Patient" FormName="modification" OnValidSubmit="Enregistrer">
+        <DataAnnotationsValidator />
+
+        <PatientFormulaire Patient="Patient" />
+
+        <button type="submit">Enregistrer</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private PatientInputDto? Patient { get; set; }
+
+    private bool refuse;
+
+    // Premier affichage (GET) : on remplit le formulaire avec le patient enregistré.
+    // Après un envoi (POST), Patient contient la saisie : il ne faut pas l'écraser.
+    protected override async Task OnInitializedAsync()
+    {
+        if (Patient is null)
+        {
+            PatientDto? enregistre = await Client.GetByIdAsync(Id);
+
+            if (enregistre is not null)
+            {
+                Patient = new PatientInputDto
+                {
+                    Prenom = enregistre.Prenom,
+                    Nom = enregistre.Nom,
+                    DateNaissance = enregistre.DateNaissance,
+                    Genre = enregistre.Genre,
+                    Adresse = enregistre.Adresse,
+                    Telephone = enregistre.Telephone
+                };
+            }
+        }
+    }
+
+    private async Task Enregistrer()
+    {
+        bool modifie = await Client.UpdateAsync(Id, Patient!);
+
+        if (!modifie)
+        {
+            refuse = true;
+            return;
+        }
+
+        Navigation.NavigateTo($"/patients/{Id}");
+    }
+}

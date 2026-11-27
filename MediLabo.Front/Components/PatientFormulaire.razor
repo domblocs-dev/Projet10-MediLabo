@@ -1,0 +1,58 @@
+﻿@* Les six champs d'un patient, communs à l'ajout et à la modification.
+   Chaque page garde son EditForm : son FormName et sa méthode d'enregistrement. *@
+
+<div>
+    <label for="prenom">Prénom</label>
+    <InputText id="prenom" @bind-Value="Patient.Prenom" />
+    <ValidationMessage For="() => Patient.Prenom" />
+</div>
+
+<div>
+    <label for="nom">Nom</label>
+    <InputText id="nom" @bind-Value="Patient.Nom" />
+    <ValidationMessage For="() => Patient.Nom" />
+</div>
+
+<div>
+    <label for="dateNaissance">Date de naissance</label>
+    <InputDate id="dateNaissance" @bind-Value="Patient.DateNaissance" />
+    <ValidationMessage For="() => Patient.DateNaissance" />
+</div>
+
+<div>
+    <label for="genre">Genre</label>
+    <InputSelect id="genre" @bind-Value="Patient.Genre">
+        <option value="">Choisir</option>
+        @foreach (var genre in genres)
+        {
+            <option value="@genre.Code">@genre.Libelle</option>
+        }
+    </InputSelect>
+    <ValidationMessage For="() => Patient.Genre" />
+</div>
+
+<div>
+    <label for="adresse">Adresse</label>
+    <InputText id="adresse" @bind-Value="Patient.Adresse" />
+    <ValidationMessage For="() => Patient.Adresse" />
+</div>
+
+<div>
+    <label for="telephone">Téléphone</label>
+    <InputText id="telephone" @bind-Value="Patient.Telephone" />
+    <ValidationMessage For="() => Patient.Telephone" />
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public PatientInputDto Patient { get; set; } = default!;
+
+    // Les options du genre sont produites par une boucle sur cette liste : Blazor peut alors
+    // marquer « selected » celle du genre reçu. Écrites en dur, elles seraient recopiées telles
+    // quelles, et la liste reviendrait à « Choisir » à chaque réaffichage.
+    private static readonly (string Code, string Libelle)[] genres =
+    [
+        ("F", "Féminin"),
+        ("M", "Masculin")
+    ];
+}
