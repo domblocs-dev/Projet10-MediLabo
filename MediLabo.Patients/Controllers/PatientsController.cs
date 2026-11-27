@@ -49,8 +49,8 @@ public class PatientsController(PatientRepository repository) : ControllerBase
             DateNaissance = dto.DateNaissance!.Value,
             GenreId = genre.Id,
             Genre = genre,
-            Adresse = dto.Adresse,
-            Telephone = dto.Telephone
+            Adresse = VideEnNull(dto.Adresse),
+            Telephone = VideEnNull(dto.Telephone)
         };
 
         Patient created = await repository.AddAsync(patient);
@@ -81,11 +81,18 @@ public class PatientsController(PatientRepository repository) : ControllerBase
         patient.DateNaissance = dto.DateNaissance!.Value;
         patient.GenreId = genre.Id;
         patient.Genre = genre;
-        patient.Adresse = dto.Adresse;
-        patient.Telephone = dto.Telephone;
+        patient.Adresse = VideEnNull(dto.Adresse);
+        patient.Telephone = VideEnNull(dto.Telephone);
 
         await repository.SaveChangesAsync();
         return NoContent();
+    }
+
+    // Un formulaire envoie aussi ses champs vides : "" ou des espaces deviennent null,
+    // pour qu'une adresse ou un téléphone absent soit toujours NULL en base.
+    private static string? VideEnNull(string? texte)
+    {
+        return string.IsNullOrWhiteSpace(texte) ? null : texte;
     }
 
     private static PatientDto ToDto(Patient patient)
